@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family relationship: siblings</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .app {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        /* ===== ВКЛАДКИ ===== */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e3eaf6;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #e3eaf6;
+            color: #2c3e50;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover { background: #d0ddef; }
+
+        .tab-btn.active {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 3px 10px rgba(52,152,219,0.4);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ===== ЗАВДАННЯ 1: ВИЗНАЧЕННЯ ===== */
+        .container-1 {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .definitions-col {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .definition-item {
+            display: flex;
+            background-color: #e3eaf6;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            line-height: 1.4;
+            color: #333;
+            align-items: flex-start;
+        }
+
+        .letter {
+            font-weight: bold;
+            margin-right: 15px;
+            color: #2c3e50;
+            font-size: 18px;
+            min-width: 20px;
+        }
+
+        .answers-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .title-words {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .drag-word {
+            background-color: #fff;
+            border: 2px solid #3498db;
+            color: #3498db;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: grab;
+            text-align: center;
+            user-select: none;
+            transition: transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .drag-word.selected {
+            background-color: #3498db;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .drag-word.dragging { opacity: 0.5; }
+
+        .drop-zone {
+            margin-left: auto;
+            min-width: 140px;
+            height: 30px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background-color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            color: #999;
+            padding: 4px 8px;
+        }
+
+        .drop-zone.hovered { background-color: #e1f0fa; border-color: #3498db; }
+
+        .drop-zone.correct {
+            background-color: #d4edda;
+            border-color: #28a745;
+            border-style: solid;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .drop-zone.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            border-style: solid;
+            color: #721c24;
+            font-weight: bold;
+            animation: shake 0.5s;
+        }
+
+        /* ===== ЗАВДАННЯ 2: ЗАПОВНЕННЯ ПРОПУСКІВ ===== */
+        .gap-text {
+            font-size: 17px;
+            line-height: 2.2;
+            color: #333;
+            background: #fafbfd;
+            padding: 25px 30px;
+            border-radius: 10px;
+            border: 1px solid #e3eaf6;
+        }
+
+        .gap-input {
+            width: 130px;
+            padding: 4px 8px;
+            border: none;
+            border-bottom: 2px solid #3498db;
+            background: #eef4fb;
+            font-size: 16px;
+            font-family: inherit;
+            color: #2c3e50;
+            text-align: center;
+            border-radius: 4px 4px 0 0;
+            margin: 0 4px;
+            transition: all 0.2s;
+        }
+
+        .gap-input:focus {
+            outline: none;
+            background: #dcebfa;
+            border-bottom-color: #2980b9;
+        }
+
+        .gap-input.correct {
+            background: #d4edda;
+            border-bottom-color: #28a745;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .gap-input.incorrect {
+            background: #f8d7da;
+            border-bottom-color: #dc3545;
+            color: #721c24;
+            font-weight: bold;
+            animation: shake 0.5s;
+        }
+
+        .gap-number {
+            font-size: 12px;
+            color: #3498db;
+            font-weight: bold;
+            vertical-align: super;
+            margin-left: 2px;
+        }
+
+        /* ===== ЗАВДАННЯ 3: ЧИТАННЯ ===== */
+        .reading-layout {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .reading-texts {
+            flex: 1.4;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            min-width: 280px;
+        }
+
+        .reading-tasks {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .person-card {
+            background: #fafbfd;
+            border-radius: 10px;
+            padding: 15px 20px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .person-card h3 {
+            margin: 0 0 8px 0;
+            color: #2980b9;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        .person-card p {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .task-item {
+            background: #e3eaf6;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 15px;
+            line-height: 1.9;
+            color: #2c3e50;
+        }
+
+        .task-number {
+            font-weight: bold;
+            color: #2980b9;
+            margin-right: 6px;
+        }
+
+        .task-name {
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 2px solid #3498db;
+            background: white;
+            font-size: 14px;
+            font-family: inherit;
+            color: #2c3e50;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 3px;
+        }
+
+        .task-name.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .task-name.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+            animation: shake 0.5s;
+        }
+
+        .word-choice {
+            display: inline-flex;
+            gap: 4px;
+            margin: 0 3px;
+            vertical-align: middle;
+        }
+
+        .word-choice label {
+            padding: 3px 10px;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.15s;
+            user-select: none;
+        }
+
+        .word-choice input[type="radio"] { display: none; }
+
+        .word-choice input[type="radio"]:checked + span,
+        .word-choice label.checked {
+            background: #3498db;
+            color: white;
+        }
+
+        .word-choice label.correct {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .word-choice label.incorrect {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24 !important;
+            animation: shake 0.5s;
+        }
+
+        /* ===== КНОПКИ ===== */
+        .check-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .check-btn:hover { background-color: #27ae60; }
+
+        .reset-btn {
+            margin-top: 20px;
+            margin-left: 10px;
+            padding: 12px 25px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .reset-btn:hover { background-color: #7f8c8d; }
+
+        .score-msg {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+
+        .score-msg.ok { color: #28a745; }
+        .score-msg.fail { color: #e74c3c; }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            .app { padding: 15px; }
+            .container-1 { flex-direction: column; gap: 20px; }
+            .definition-item { flex-direction: column; align-items: flex-start; }
+            .drop-zone { margin-left: 0; margin-top: 10px; width: 100%; }
+            .gap-input { width: 100px; }
+            .gap-text { padding: 15px; font-size: 15px; line-height: 2.4; }
+            .reading-layout { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <!-- ВКЛАДКИ -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab1">📘 Exercise 1: </button>
+        <button class="tab-btn" data-tab="tab2">✏️ Exercise 2: Fill in the gaps</button>
+        <button class="tab-btn" data-tab="tab3">📖 Exercise 3: Reading</button>
+    </div>
+
+    <!-- ===== ВКЛАДКА 1: ВИЗНАЧЕННЯ ===== -->
+    <div id="tab1" class="tab-content active">
+        <div class="container-1">
+            <div class="definitions-col" id="definitions-list"></div>
+            <div class="answers-col">
+                <div class="title-words">Варіанти</div>
+                <div id="words-list"></div>
+                <div>
+                    <button class="check-btn" onclick="checkExercise1()">Check</button>
+                    <button class="reset-btn" onclick="resetExercise1()">Try again</button>
+                </div>
+                <div class="score-msg" id="msg1"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ВКЛАДКА 2: ЗАПОВНЕННЯ ПРОПУСКІВ ===== -->
+    <div id="tab2" class="tab-content">
+        <div class="gap-text">
+            We see them every morning. We eat with them every evening. We sometimes even share our bedrooms with them. They’re our very best friends and, <u><b>0</b> <b>from</b></u> time to time, our worst enemies.<br><br>
+            Very <input class="gap-input" data-answer="few" data-num="1"><span class="gap-number">1</span> people would claim that they never fall <input class="gap-input" data-answer="out" data-num="2"><span class="gap-number">2</span> with their brothers or sisters. However, according to research, this sometimes difficult relationship can actually be good for you.<br><br>
+            When brothers and sisters quarrel with <input class="gap-input" data-answer="each" data-num="3"><span class="gap-number">3</span> other, they practise social skills that <input class="gap-input" data-answer="are" data-num="4"><span class="gap-number">4</span> key in adult life. They learn to understand their own feelings and they become more aware <input class="gap-input" data-answer="of" data-num="5"><span class="gap-number">5</span> other people’s feelings. The youngest child benefits even <input class="gap-input" data-answer="more" data-num="6"><span class="gap-number">6</span>. They develop better language skills for their age, compared <input class="gap-input" data-answer="to" data-num="7"><span class="gap-number">7</span> other children without older brothers or sisters. Lastly, brothers and sisters are naturally competitive in everything they do. This competition often encourages them to try harder, whether they’re doing sport <input class="gap-input" data-answer="or" data-num="8"><span class="gap-number">8</span> schoolwork.<br><br>
+            What are your experiences with your brothers and sisters? What do you think you’ve learned from them?
+        </div>
+        <div>
+            <button class="check-btn" onclick="checkExercise2()">Check</button>
+            <button class="reset-btn" onclick="resetExercise2()">Try again</button>
+        </div>
+        <div class="score-msg" id="msg2"></div>
+    </div>
+
+    <!-- ===== ВКЛАДКА 3: ЧИТАННЯ ===== -->
+    <div id="tab3" class="tab-content">
+        <p style="font-size:15px; color:#555; margin-top:0;"><strong>Read the second part of the article. Complete the sentences with names and choose the correct words.</strong></p>
+
+        <div class="reading-layout">
+            <!-- Тексти -->
+            <div class="reading-texts">
+                <div class="person-card">
+                    <h3>ADAM</h3>
+                    <p>I remember being quite mean to my youngest brother. We picked on him all the time because we were so much older than him. For instance, he used to get terrified while watching horror films. One day, while we were watching one, my other brother and I quietly left the room. Soon the film got slightly scary, and he suddenly realised he was all on his own. We’d both gone. He started screaming like a baby!</p>
+                    <p style="margin-top:10px;">As the eldest child of three, I think I’m good at identifying with children younger than me. It’s also made me more patient with younger kids at school – which means I tend to make a lot of friends.</p>
+                </div>
+
+                <div class="person-card">
+                    <h3>SARA</h3>
+                    <p>My brother takes after my dad in that he has always been good at fixing things. One day (I was 11, he was 13), my parents were really impressed when he fixed the brakes on his bike himself. The next day, I was riding my bike down a steep hill near our house. Once I reached the bottom, I found out how he’d done it. He’d taken the brakes off my bike! Fortunately, I just managed to stop without injuring myself, but I learned something from that day – I always check my bike before I use it!</p>
+                </div>
+
+                <div class="person-card">
+                    <h3>LUCY</h3>
+                    <p>When I was four, my sisters and I had very little money. I can’t imagine I really understood what it was. But sometimes we used to get a few coins from relatives, like our grandparents. My eldest sister was 11 and she used to talk me into swapping my old, dirty coins for her new, shiny ones. What I didn’t realise, of course, was that the coins she was giving me were worth less than the ones that I was giving her! I learned two things: how to count and never to depend on my eldest sister’s honesty!</p>
+                </div>
+            </div>
+
+            <!-- Завдання -->
+            <div class="reading-tasks" id="reading-tasks">
+                <!-- Генеруються через JS -->
+            </div>
+        </div>
+
+        <div>
+            <button class="check-btn" onclick="checkExercise3()">Check</button>
+            <button class="reset-btn" onclick="resetExercise3()">Try again</button>
+        </div>
+        <div class="score-msg" id="msg3"></div>
+    </div>
+</div>
+
+<script>
+    /* ============================================
+       ПЕРЕМИКАННЯ ВКЛАДОК
+       ============================================ */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    /* ============================================
+       ЗАВДАННЯ 1: ВИЗНАЧЕННЯ
+       ============================================ */
+    const exerciseData = [
+        { id: 'a', text: 'give someone an instruction that they must do', answer: 'order' },
+        { id: 'b', text: 'express an idea or plan for someone to consider', answer: 'suggest' },
+        { id: 'c', text: 'tell someone that you will cause problems for them if they do not do what you want', answer: 'threaten' },
+        { id: 'd', text: 'make someone aware of a possible danger or problem, especially one in the future', answer: 'warn' },
+        { id: 'e', text: 'admit you have done something bad', answer: 'confess' },
+        { id: 'f', text: 'say that someone has done something bad', answer: 'accuse' },
+        { id: 'g', text: 'say that something is true or is a fact, although you cannot prove it and other people might not believe it', answer: 'claim' },
+        { id: 'h', text: 'say that something is not true', answer: 'deny' }
+    ];
+
+    const words = ['accuse', 'order', 'deny', 'warn', 'suggest', 'confess', 'claim', 'threaten'];
+
+    let selectedWordElement = null;
+
+    function initExercise1() {
+        const defsContainer = document.getElementById('definitions-list');
+        const wordsContainer = document.getElementById('words-list');
+
+        exerciseData.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'definition-item';
+            div.innerHTML = `
+                <span class="letter">${item.id}</span>
+                <span>${item.text}</span>
+                <div class="drop-zone" data-id="${item.id}" data-answer="${item.answer}">?</div>
+            `;
+            defsContainer.appendChild(div);
+        });
+
+        words.forEach(word => {
+            const div = document.createElement('div');
+            div.className = 'drag-word';
+            div.draggable = true;
+            div.textContent = word;
+            div.dataset.word = word;
+            div.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', e.target.dataset.word);
+                e.target.classList.add('dragging');
+            });
+            div.addEventListener('dragend', e => e.target.classList.remove('dragging'));
+            div.addEventListener('click', e => {
+                if (selectedWordElement) selectedWordElement.classList.remove('selected');
+                selectedWordElement = e.target;
+                selectedWordElement.classList.add('selected');
+            });
+            wordsContainer.appendChild(div);
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                if (!zone.classList.contains('correct')) zone.classList.add('hovered');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('hovered'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('hovered');
+                if (zone.classList.contains('correct')) return;
+                placeWordInZone(zone, e.dataTransfer.getData('text/plain'));
+            });
+            zone.addEventListener('click', () => {
+                if (zone.classList.contains('correct')) return;
+                if (selectedWordElement) {
+                    placeWordInZone(zone, selectedWordElement.dataset.word);
+                    selectedWordElement.classList.remove('selected');
+                    selectedWordElement = null;
+                } else if (zone.textContent !== '?') {
+                    zone.textContent = '?';
+                    delete zone.dataset.userAnswer;
+                    zone.className = 'drop-zone';
+                }
+            });
+        });
+    }
+
+    function placeWordInZone(zone, word) {
+        zone.textContent = word;
+        zone.dataset.userAnswer = word;
+        zone.style.color = '#333';
+        zone.classList.remove('incorrect', 'correct');
+    }
+
+    function checkExercise1() {
+        const zones = document.querySelectorAll('#tab1 .drop-zone');
+        let correct = 0;
+        zones.forEach(zone => {
+            const ok = zone.dataset.userAnswer === zone.dataset.answer;
+            zone.classList.toggle('correct', ok);
+            zone.classList.toggle('incorrect', !!zone.dataset.userAnswer && !ok);
+            if (ok) correct++;
+        });
+        const msg = document.getElementById('msg1');
+        msg.className = 'score-msg ' + (correct === zones.length ? 'ok' : 'fail');
+        msg.textContent = `Результат: ${correct} / ${zones.length}`;
+        if (correct === zones.length) msg.textContent += ' 🎉 Чудово!';
+    }
+
+    function resetExercise1() {
+        document.querySelectorAll('#tab1 .drop-zone').forEach(zone => {
+            zone.textContent = '?';
+            delete zone.dataset.userAnswer;
+            zone.className = 'drop-zone';
+        });
+        document.querySelectorAll('#tab1 .drag-word').forEach(w => w.classList.remove('selected'));
+        selectedWordElement = null;
+        document.getElementById('msg1').textContent = '';
+    }
+
+    /* ============================================
+       ЗАВДАННЯ 2: ЗАПОВНЕННЯ ПРОПУСКІВ
+       ============================================ */
+    function checkExercise2() {
+        const inputs = document.querySelectorAll('#tab2 .gap-input');
+        let correct = 0;
+
+        inputs.forEach(input => {
+            const userAnswer = input.value.trim().toLowerCase();
+            const correctAnswer = input.dataset.answer.toLowerCase();
+            const ok = userAnswer === correctAnswer;
+
+            input.classList.toggle('correct', ok);
+            input.classList.toggle('incorrect', !ok && userAnswer !== '');
+            if (ok) correct++;
+        });
+
+        const msg = document.getElementById('msg2');
+        msg.className = 'score-msg ' + (correct === inputs.length ? 'ok' : 'fail');
+        msg.textContent = `Результат: ${correct} / ${inputs.length}`;
+        if (correct === inputs.length) msg.textContent += ' 🎉 Чудово!';
+    }
+
+    function resetExercise2() {
+        document.querySelectorAll('#tab2 .gap-input').forEach(input => {
+            input.value = '';
+            input.classList.remove('correct', 'incorrect');
+        });
+        document.getElementById('msg2').textContent = '';
+    }
+
+    document.querySelectorAll('#tab2 .gap-input').forEach(input => {
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') checkExercise2();
+        });
+    });
+
+    /* ============================================
+       ЗАВДАННЯ 3: ЧИТАННЯ
+       ============================================ */
+
+    // Структура завдань: кожне має:
+    //  - name: правильне ім'я (Adam / Sara / Lucy)
+    //  - parts: масив частин речення. Кожна частина — або рядок,
+    //    або об'єкт {options: [...], answer: '...'} для вибору слова
+    const readingTasks = [
+        {
+            name: 'Adam',
+            parts: [
+                ' has got at least ',
+                { options: ['two', 'three'], answer: 'two' },
+                ' older sisters.'
+            ]
+        },
+        {
+            name: 'Adam',
+            parts: [
+                ' has got one older ',
+                { options: ['older', 'younger'], answer: 'younger' },
+                ' brother.'
+            ]
+        },
+        {
+            name: 'Sara',
+            parts: [
+                ' has got two younger ',
+                { options: ['brothers', 'sisters'], answer: 'brothers' },
+                '.'
+            ]
+        },
+        {
+            name: 'Sara',
+            parts: [
+                ' almost hurt herself because of her ',
+                { options: ['brother', 'sister'], answer: 'brother' },
+                '.'
+            ]
+        },
+        {
+            name: 'Adam',
+            parts: [
+                ' is more ',
+                { options: ['popular', 'gets better marks'], answer: 'popular' },
+                ' because of his ',
+                { options: ['brothers', 'sisters'], answer: 'brothers' },
+                '.'
+            ]
+        },
+        {
+            name: 'Lucy',
+            parts: [
+                ' got better at ',
+                { options: ['maths', 'English'], answer: 'maths' },
+                ' because of her ',
+                { options: ['eldest sister', 'brother'], answer: 'eldest sister' },
+                '.'
+            ]
+        }
+    ];
+
+    function initExercise3() {
+        const container = document.getElementById('reading-tasks');
+        const names = ['Adam', 'Sara', 'Lucy'];
+
+        readingTasks.forEach((task, idx) => {
+            const div = document.createElement('div');
+            div.className = 'task-item';
+            div.dataset.taskIndex = idx;
+            div.dataset.correctName = task.name;
+
+            // Побудова HTML для речення
+            let html = `<span class="task-number">${idx + 1}</span>`;
+            html += `<select class="task-name" data-task="${idx}">`;
+            html += `<option value="">— ім'я —</option>`;
+            names.forEach(n => {
+                html += `<option value="${n}">${n}</option>`;
+            });
+            html += `</select>`;
+
+            task.parts.forEach((part, pIdx) => {
+                if (typeof part === 'string') {
+                    html += part;
+                } else {
+                    // Вибір слова
+                    html += `<span class="word-choice" data-task="${idx}" data-part="${pIdx}">`;
+                    part.options.forEach(opt => {
+                        const safeId = `t${idx}_p${pIdx}_${opt.replace(/\s+/g,'_')}`;
+                        html += `
+                            <input type="radio" id="${safeId}" name="t${idx}_p${pIdx}" value="${opt}">
+                            <label for="${safeId}" data-value="${opt}" data-correct="${opt === part.answer ? 'true' : 'false'}">${opt}</label>
+                        `;
+                    });
+                    html += `</span>`;
+                }
+            });
+
+            div.innerHTML = html;
+            container.appendChild(div);
+        });
+
+        // Підсвічування вибраного radio
+        container.querySelectorAll('.word-choice input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', e => {
+                const group = e.target.closest('.word-choice');
+                group.querySelectorAll('label').forEach(l => l.classList.remove('checked'));
+                group.querySelector(`label[for="${e.target.id}"]`).classList.add('checked');
+            });
+        });
+    }
+
+    function checkExercise3() {
+        const container = document.getElementById('reading-tasks');
+        let total = readingTasks.length; // 6 завдань (по 1 балу за ім'я + 1+ бали за вибір слів)
+        let correctScore = 0;
+        let totalScore = 0;
+
+        // Перевірка імен (select)
+        container.querySelectorAll('.task-name').forEach((sel, idx) => {
+            const task = readingTasks[idx];
+            const ok = sel.value === task.name;
+            sel.classList.toggle('correct', ok);
+            sel.classList.toggle('incorrect', !ok && sel.value !== '');
+            if (ok) correctScore++;
+            totalScore++;
+        });
+
+        // Перевірка вибору слів (radio)
+        container.querySelectorAll('.word-choice').forEach(group => {
+            const taskIdx = group.dataset.task;
+            const task = readingTasks[taskIdx];
+            const selected = group.querySelector('input[type="radio"]:checked');
+            const labels = group.querySelectorAll('label');
+
+            labels.forEach(l => l.classList.remove('correct', 'incorrect'));
+
+            if (selected) {
+                const isCorrect = selected.value === task.parts.find(p => p.options)?.answer ||
+                    // fallback: шукаємо правильну відповідь для цієї частини
+                    false;
+                // Точніша перевірка через data-correct на label
+                const label = group.querySelector(`label[for="${selected.id}"]`);
+                const ok = label.dataset.correct === 'true';
+
+                label.classList.add(ok ? 'correct' : 'incorrect');
+                if (ok) correctScore++;
+            }
+            totalScore++;
+        });
+
+        const msg = document.getElementById('msg3');
+        msg.className = 'score-msg ' + (correctScore === totalScore ? 'ok' : 'fail');
+        msg.textContent = `Результат: ${correctScore} / ${totalScore}`;
+        if (correctScore === totalScore) msg.textContent += ' 🎉 Чудово!';
+    }
+
+    function resetExercise3() {
+        const container = document.getElementById('reading-tasks');
+        container.querySelectorAll('.task-name').forEach(sel => {
+            sel.value = '';
+            sel.classList.remove('correct', 'incorrect');
+        });
+        container.querySelectorAll('.word-choice input[type="radio"]').forEach(r => r.checked = false);
+        container.querySelectorAll('.word-choice label').forEach(l => l.classList.remove('checked', 'correct', 'incorrect'));
+        document.getElementById('msg3').textContent = '';
+    }
+
+    /* ============================================
+       ЗАПУСК
+       ============================================ */
+    initExercise1();
+    initExercise3();
+</script>
+
+</body>
+</html>
