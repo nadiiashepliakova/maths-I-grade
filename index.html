@@ -348,6 +348,203 @@
             animation: shake 0.5s;
         }
 
+        /* ===== ЗАВДАННЯ 4: ФРАЗОВІ ДІЄСЛОВА ===== */
+        .phrasal-layout {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .phrasal-defs {
+            flex: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 300px;
+        }
+
+        .phrasal-phrases {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 250px;
+        }
+
+        .phrasal-def-item {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            background: #fafbfd;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #e3eaf6;
+        }
+
+        .phrasal-letter {
+            font-weight: bold;
+            color: #2980b9;
+            margin-right: 5px;
+            font-size: 18px;
+        }
+
+        .phrasal-drop {
+            min-width: 160px;
+            height: 36px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: #999;
+            padding: 0 10px;
+            background: #fff;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .phrasal-drop.hovered { background: #e1f0fa; border-color: #3498db; }
+        
+        .phrasal-drop.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            border-style: solid;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .phrasal-drop.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            border-style: solid;
+            color: #721c24;
+            animation: shake 0.5s;
+        }
+
+        .phrasal-card {
+            background: #e3eaf6;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            color: #2c3e50;
+            cursor: grab;
+            user-select: none;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .phrasal-card:active { cursor: grabbing; }
+        
+        .phrasal-card.selected {
+            background: #3498db;
+            color: white;
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(52,152,219,0.3);
+        }
+        
+        .phrasal-card.dragging { opacity: 0.4; }
+
+        /* ===== ЗАВДАННЯ 5: KEY WORD TRANSFORMATION ===== */
+        .kw-instruction {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+            background: #fafbfd;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+
+        .kw-item {
+            background: white;
+            border: 1px solid #e3eaf6;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .kw-original {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            line-height: 1.4;
+        }
+        
+        .kw-number {
+            font-weight: bold;
+            color: #3498db;
+            font-size: 18px;
+        }
+
+        .kw-key {
+            font-weight: bold;
+            color: #e74c3c;
+            text-transform: uppercase;
+            font-size: 15px;
+            margin-left: auto;
+            letter-spacing: 1px;
+            background: #fdf2f2;
+            padding: 4px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .kw-target {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .kw-input {
+            padding: 6px 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #2c3e50;
+            width: 300px;
+            transition: all 0.2s;
+        }
+
+        .kw-input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .kw-input.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .kw-input.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+            animation: shake 0.5s;
+        }
+
         /* ===== КНОПКИ ===== */
         .check-btn {
             margin-top: 20px;
@@ -406,17 +603,26 @@
             .gap-input { width: 100px; }
             .gap-text { padding: 15px; font-size: 15px; line-height: 2.4; }
             .reading-layout { flex-direction: column; }
+            .phrasal-layout { flex-direction: column; }
+            .phrasal-def-item { flex-direction: column; align-items: flex-start; }
+            .phrasal-drop { margin-left: 0; margin-top: 5px; width: 100%; }
+            
+            .kw-original { flex-direction: column; align-items: flex-start; }
+            .kw-key { margin-left: 0; margin-top: 5px; }
+            .kw-input { width: 100%; }
         }
     </style>
 </head>
 <body>
-<h1>Family relationship: siblings</h1>
+
 <div class="app">
     <!-- ВКЛАДКИ -->
     <div class="tabs">
-        <button class="tab-btn active" data-tab="tab1">📘 Exercise 1: </button>
+        <button class="tab-btn active" data-tab="tab1">📘 Exercise 1: Definitions</button>
         <button class="tab-btn" data-tab="tab2">✏️ Exercise 2: Fill in the gaps</button>
         <button class="tab-btn" data-tab="tab3">📖 Exercise 3: Reading</button>
+        <button class="tab-btn" data-tab="tab4">🔗 Exercise 4: Phrasal Verbs</button>
+        <button class="tab-btn" data-tab="tab5">🔄 Exercise 5: Key Word Transformation</button>
     </div>
 
     <!-- ===== ВКЛАДКА 1: ВИЗНАЧЕННЯ ===== -->
@@ -455,7 +661,6 @@
         <p style="font-size:15px; color:#555; margin-top:0;"><strong>Read the second part of the article. Complete the sentences with names and choose the correct words.</strong></p>
 
         <div class="reading-layout">
-            <!-- Тексти -->
             <div class="reading-texts">
                 <div class="person-card">
                     <h3>ADAM</h3>
@@ -474,7 +679,6 @@
                 </div>
             </div>
 
-            <!-- Завдання -->
             <div class="reading-tasks" id="reading-tasks">
                 <!-- Генеруються через JS -->
             </div>
@@ -485,6 +689,40 @@
             <button class="reset-btn" onclick="resetExercise3()">Try again</button>
         </div>
         <div class="score-msg" id="msg3"></div>
+    </div>
+
+    <!-- ===== ВКЛАДКА 4: ФРАЗОВІ ДІЄСЛОВА ===== -->
+    <div id="tab4" class="tab-content">
+        <p style="font-size:15px; color:#555; margin-top:0;"><strong>Match the phrasal verbs to their definitions. Drag the verb to the correct definition.</strong></p>
+
+        <div class="phrasal-layout">
+            <div class="phrasal-defs" id="phrasal-defs-list"></div>
+            <div class="phrasal-phrases" id="phrasal-phrases-list"></div>
+        </div>
+
+        <div>
+            <button class="check-btn" onclick="checkExercise4()">Check</button>
+            <button class="reset-btn" onclick="resetExercise4()">Try again</button>
+        </div>
+        <div class="score-msg" id="msg4"></div>
+    </div>
+
+    <!-- ===== ВКЛАДКА 5: KEY WORD TRANSFORMATION ===== -->
+    <div id="tab5" class="tab-content">
+        <div class="kw-instruction">
+            <strong>Complete the second sentence so that it has a similar meaning to the first sentence, using the word given.</strong><br>
+            Do not change the word given. You must use between two and five words, including the word given.
+        </div>
+
+        <div id="kw-list">
+            <!-- Генерується через JS -->
+        </div>
+
+        <div>
+            <button class="check-btn" onclick="checkExercise5()">Check</button>
+            <button class="reset-btn" onclick="resetExercise5()">Try again</button>
+        </div>
+        <div class="score-msg" id="msg5"></div>
     </div>
 </div>
 
@@ -553,7 +791,7 @@
             wordsContainer.appendChild(div);
         });
 
-        document.querySelectorAll('.drop-zone').forEach(zone => {
+        document.querySelectorAll('#tab1 .drop-zone').forEach(zone => {
             zone.addEventListener('dragover', e => {
                 e.preventDefault();
                 if (!zone.classList.contains('correct')) zone.classList.add('hovered');
@@ -653,11 +891,6 @@
     /* ============================================
        ЗАВДАННЯ 3: ЧИТАННЯ
        ============================================ */
-
-    // Структура завдань: кожне має:
-    //  - name: правильне ім'я (Adam / Sara / Lucy)
-    //  - parts: масив частин речення. Кожна частина — або рядок,
-    //    або об'єкт {options: [...], answer: '...'} для вибору слова
     const readingTasks = [
         {
             name: 'Adam',
@@ -723,10 +956,9 @@
             div.dataset.taskIndex = idx;
             div.dataset.correctName = task.name;
 
-            // Побудова HTML для речення
             let html = `<span class="task-number">${idx + 1}</span>`;
             html += `<select class="task-name" data-task="${idx}">`;
-            html += `<option value="">— ім'я —</option>`;
+            html += `<option value="">— name —</option>`;
             names.forEach(n => {
                 html += `<option value="${n}">${n}</option>`;
             });
@@ -736,7 +968,6 @@
                 if (typeof part === 'string') {
                     html += part;
                 } else {
-                    // Вибір слова
                     html += `<span class="word-choice" data-task="${idx}" data-part="${pIdx}">`;
                     part.options.forEach(opt => {
                         const safeId = `t${idx}_p${pIdx}_${opt.replace(/\s+/g,'_')}`;
@@ -753,7 +984,6 @@
             container.appendChild(div);
         });
 
-        // Підсвічування вибраного radio
         container.querySelectorAll('.word-choice input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', e => {
                 const group = e.target.closest('.word-choice');
@@ -765,11 +995,9 @@
 
     function checkExercise3() {
         const container = document.getElementById('reading-tasks');
-        let total = readingTasks.length; // 6 завдань (по 1 балу за ім'я + 1+ бали за вибір слів)
         let correctScore = 0;
         let totalScore = 0;
 
-        // Перевірка імен (select)
         container.querySelectorAll('.task-name').forEach((sel, idx) => {
             const task = readingTasks[idx];
             const ok = sel.value === task.name;
@@ -779,23 +1007,14 @@
             totalScore++;
         });
 
-        // Перевірка вибору слів (radio)
         container.querySelectorAll('.word-choice').forEach(group => {
-            const taskIdx = group.dataset.task;
-            const task = readingTasks[taskIdx];
             const selected = group.querySelector('input[type="radio"]:checked');
             const labels = group.querySelectorAll('label');
-
             labels.forEach(l => l.classList.remove('correct', 'incorrect'));
 
             if (selected) {
-                const isCorrect = selected.value === task.parts.find(p => p.options)?.answer ||
-                    // fallback: шукаємо правильну відповідь для цієї частини
-                    false;
-                // Точніша перевірка через data-correct на label
                 const label = group.querySelector(`label[for="${selected.id}"]`);
                 const ok = label.dataset.correct === 'true';
-
                 label.classList.add(ok ? 'correct' : 'incorrect');
                 if (ok) correctScore++;
             }
@@ -820,10 +1039,255 @@
     }
 
     /* ============================================
+       ЗАВДАННЯ 4: ФРАЗОВІ ДІЄСЛОВА
+       ============================================ */
+    const phrasalData = [
+        { id: 'a', text: 'feel that you can understand someone or be able to share their feelings', answer: 'identify with' },
+        { id: 'b', text: 'persuade someone to do something', answer: 'talk into' },
+        { id: 'c', text: 'be similar to an older member of your family', answer: 'take after' },
+        { id: 'd', text: 'argue with someone and stop being friendly with them', answer: 'fall out with' },
+        { id: 'e', text: 'trust someone or something to help you', answer: 'depend on' },
+        { id: 'f', text: 'choose a person and criticise or treat them unfairly', answer: 'pick on' }
+    ];
+
+    const phrasalPhrases = ['identify with', 'talk into', 'take after', 'fall out with', 'depend on', 'pick on'];
+    let selectedPhraseElement = null;
+
+    function initExercise4() {
+        const defsContainer = document.getElementById('phrasal-defs-list');
+        const phrasesContainer = document.getElementById('phrasal-phrases-list');
+
+        phrasalData.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'phrasal-def-item';
+            div.innerHTML = `
+                <span class="phrasal-letter">${item.id}</span>
+                <span>${item.text}</span>
+                <div class="phrasal-drop" data-answer="${item.answer}">?</div>
+            `;
+            defsContainer.appendChild(div);
+        });
+
+        const shuffledPhrases = [...phrasalPhrases].sort(() => Math.random() - 0.5);
+        shuffledPhrases.forEach(phrase => {
+            const div = document.createElement('div');
+            div.className = 'phrasal-card';
+            div.draggable = true;
+            div.textContent = phrase;
+            div.dataset.phrase = phrase;
+            
+            div.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', e.target.dataset.phrase);
+                e.target.classList.add('dragging');
+            });
+            div.addEventListener('dragend', e => e.target.classList.remove('dragging'));
+            
+            div.addEventListener('click', () => {
+                if (selectedPhraseElement) selectedPhraseElement.classList.remove('selected');
+                selectedPhraseElement = div;
+                selectedPhraseElement.classList.add('selected');
+            });
+
+            phrasesContainer.appendChild(div);
+        });
+
+        document.querySelectorAll('.phrasal-drop').forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('hovered');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('hovered'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('hovered');
+                const phrase = e.dataTransfer.getData('text/plain');
+                placePhrase(zone, phrase);
+            });
+            
+            zone.addEventListener('click', () => {
+                if (selectedPhraseElement) {
+                    placePhrase(zone, selectedPhraseElement.dataset.phrase);
+                    selectedPhraseElement.classList.remove('selected');
+                    selectedPhraseElement = null;
+                } else if (zone.textContent !== '?') {
+                    zone.textContent = '?';
+                    zone.className = 'phrasal-drop';
+                    delete zone.dataset.userAnswer;
+                }
+            });
+        });
+    }
+
+    function placePhrase(zone, phrase) {
+        if (zone.classList.contains('correct')) return;
+        zone.textContent = phrase;
+        zone.dataset.userAnswer = phrase;
+        zone.classList.remove('incorrect', 'correct');
+    }
+
+    function checkExercise4() {
+        const zones = document.querySelectorAll('.phrasal-drop');
+        let correctCount = 0;
+
+        zones.forEach(zone => {
+            const correct = zone.dataset.answer;
+            const user = zone.dataset.userAnswer;
+
+            if (user === correct) {
+                zone.classList.add('correct');
+                zone.classList.remove('incorrect');
+                correctCount++;
+            } else if (user) {
+                zone.classList.add('incorrect');
+                zone.classList.remove('correct');
+            }
+        });
+
+        const msg = document.getElementById('msg4');
+        msg.className = 'score-msg ' + (correctCount === zones.length ? 'ok' : 'fail');
+        msg.textContent = `Результат: ${correctCount} / ${zones.length}`;
+        if (correctCount === zones.length) msg.textContent += ' 🎉 Чудово!';
+    }
+
+    function resetExercise4() {
+        document.querySelectorAll('.phrasal-drop').forEach(zone => {
+            zone.textContent = '?';
+            zone.className = 'phrasal-drop';
+            delete zone.dataset.userAnswer;
+        });
+        if (selectedPhraseElement) {
+            selectedPhraseElement.classList.remove('selected');
+            selectedPhraseElement = null;
+        }
+        document.getElementById('msg4').textContent = '';
+    }
+
+    /* ============================================
+       ЗАВДАННЯ 5: KEY WORD TRANSFORMATION
+       ============================================ */
+    const kwData = [
+        {
+            num: 1,
+            original: "My brother isn't like either of my parents.",
+            key: "TAKE",
+            start: "My brother ",
+            end: " either of my parents.",
+            answer: "doesn't take after"
+        },
+        {
+            num: 2,
+            original: "Lucy isn't talking to her brother because he lost her phone.",
+            key: "FALLEN",
+            start: "Lucy has ",
+            end: " her brother because he lost her phone.",
+            answer: "fallen out with"
+        },
+        {
+            num: 3,
+            original: "It was hard for me to understand how the main character felt.",
+            key: "IDENTIFYING",
+            start: "I had difficulty ",
+            end: " the main character.",
+            answer: "identifying with"
+        },
+        {
+            num: 4,
+            original: "Did you persuade your parents to let you stay over?",
+            key: "TALK",
+            start: "Did you ",
+            end: " you stay over?",
+            answer: "talk your parents into letting" // Враховано структуру talk smb into doing smth
+        },
+        {
+            num: 5,
+            original: "The other girls treated Maria unfairly because she was clever.",
+            key: "PICKED",
+            start: "Maria ",
+            end: " by the other girls because she was clever.",
+            answer: "was picked on"
+        },
+        {
+            num: 6,
+            original: "Michael can be trusted in a crisis.",
+            key: "DEPEND",
+            start: "", // Тут пропуск на початку рядка
+            end: " Michael in a crisis.",
+            answer: "You can depend on"
+        }
+    ];
+
+    function initExercise5() {
+        const container = document.getElementById('kw-list');
+        
+        kwData.forEach((item) => {
+            const div = document.createElement('div');
+            div.className = 'kw-item';
+            
+            // Формуємо HTML
+            let html = `
+                <div class="kw-original">
+                    <span class="kw-number">${item.num}</span>
+                    <span>${item.original}</span>
+                    <span class="kw-key">${item.key}</span>
+                </div>
+                <div class="kw-target">
+                    ${item.start ? `<span>${item.start}</span>` : ''}
+                    <input class="kw-input" data-answer="${item.answer}" placeholder="...">
+                    <span>${item.end}</span>
+                </div>
+            `;
+            
+            div.innerHTML = html;
+            container.appendChild(div);
+        });
+
+        // Дозволяємо перевірку по Enter
+        container.querySelectorAll('.kw-input').forEach(input => {
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') checkExercise5();
+            });
+        });
+    }
+
+    function checkExercise5() {
+        const inputs = document.querySelectorAll('#tab5 .kw-input');
+        let correct = 0;
+
+        inputs.forEach(input => {
+            // Очищуємо від зайвих пробілів, робимо нижній регістр, 
+            // а також замінюємо тире/апострофи на стандартні, якщо треба
+            let userAnswer = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+            const correctAnswer = input.dataset.answer.toLowerCase();
+
+            // Перевіряємо чи співпадає
+            const ok = userAnswer === correctAnswer;
+
+            input.classList.toggle('correct', ok);
+            input.classList.toggle('incorrect', !ok && userAnswer !== '');
+            if (ok) correct++;
+        });
+
+        const msg = document.getElementById('msg5');
+        msg.className = 'score-msg ' + (correct === inputs.length ? 'ok' : 'fail');
+        msg.textContent = `Результат: ${correct} / ${inputs.length}`;
+        if (correct === inputs.length) msg.textContent += ' 🎉 Чудово!';
+    }
+
+    function resetExercise5() {
+        document.querySelectorAll('#tab5 .kw-input').forEach(input => {
+            input.value = '';
+            input.classList.remove('correct', 'incorrect');
+        });
+        document.getElementById('msg5').textContent = '';
+    }
+
+    /* ============================================
        ЗАПУСК
        ============================================ */
     initExercise1();
     initExercise3();
+    initExercise4();
+    initExercise5();
 </script>
 
 </body>
