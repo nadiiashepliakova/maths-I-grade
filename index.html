@@ -453,7 +453,60 @@
         
         .phrasal-card.dragging { opacity: 0.4; }
 
-        /* ===== ЗАВДАННЯ 5: KEY WORD TRANSFORMATION ===== */
+        /* ===== ЗАВДАННЯ 5: MULTIPLE CHOICE TEXT ===== */
+        .mc-text {
+            font-size: 18px;
+            line-height: 2;
+            color: #333;
+            background: #fdf2f2; /* світло-рожевий фон як на картинці */
+            padding: 25px 30px;
+            border-radius: 10px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .mc-option {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-style: italic;
+            font-weight: bold;
+            transition: all 0.2s;
+            user-select: none;
+            display: inline-block;
+        }
+
+        .mc-option:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .mc-option.selected {
+            background: #e3eaf6;
+            color: #2980b9;
+            box-shadow: 0 0 0 2px #3498db inset;
+        }
+
+        .mc-option.correct {
+            background: #d4edda !important;
+            color: #155724 !important;
+            box-shadow: 0 0 0 2px #28a745 inset;
+        }
+
+        .mc-option.incorrect {
+            background: #f8d7da !important;
+            color: #721c24 !important;
+            box-shadow: 0 0 0 2px #dc3545 inset;
+            animation: shake 0.4s;
+        }
+
+        .mc-num {
+            font-size: 13px;
+            vertical-align: super;
+            color: #2980b9;
+            font-weight: bold;
+            margin-right: 2px;
+        }
+
+        /* ===== ЗАВДАННЯ 6: KEY WORD TRANSFORMATION ===== */
         .kw-instruction {
             font-size: 16px;
             color: #333;
@@ -606,6 +659,7 @@
             .phrasal-layout { flex-direction: column; }
             .phrasal-def-item { flex-direction: column; align-items: flex-start; }
             .phrasal-drop { margin-left: 0; margin-top: 5px; width: 100%; }
+            .mc-text { font-size: 16px; padding: 15px; }
             
             .kw-original { flex-direction: column; align-items: flex-start; }
             .kw-key { margin-left: 0; margin-top: 5px; }
@@ -622,7 +676,8 @@
         <button class="tab-btn" data-tab="tab2">✏️ Exercise 2: Fill in the gaps</button>
         <button class="tab-btn" data-tab="tab3">📖 Exercise 3: Reading</button>
         <button class="tab-btn" data-tab="tab4">🔗 Exercise 4: Phrasal Verbs</button>
-        <button class="tab-btn" data-tab="tab5">🔄 Exercise 5: Key Word Transformation</button>
+        <button class="tab-btn" data-tab="tab5">🔘 Exercise 5: Choose the correct word</button>
+        <button class="tab-btn" data-tab="tab6">🔄 Exercise 6: Key Word Transformation</button>
     </div>
 
     <!-- ===== ВКЛАДКА 1: ВИЗНАЧЕННЯ ===== -->
@@ -707,8 +762,23 @@
         <div class="score-msg" id="msg4"></div>
     </div>
 
-    <!-- ===== ВКЛАДКА 5: KEY WORD TRANSFORMATION ===== -->
+    <!-- ===== ВКЛАДКА 5: MULTIPLE CHOICE TEXT ===== -->
     <div id="tab5" class="tab-content">
+        <p style="font-size:15px; color:#555; margin-top:0;"><strong>Read the text and click on the correct word in each pair.</strong></p>
+
+        <div class="mc-text" id="mc-text-container">
+            <!-- Текст генерується через JS -->
+        </div>
+
+        <div>
+            <button class="check-btn" onclick="checkExercise5()">Check</button>
+            <button class="reset-btn" onclick="resetExercise5()">Try again</button>
+        </div>
+        <div class="score-msg" id="msg5"></div>
+    </div>
+
+    <!-- ===== ВКЛАДКА 6: KEY WORD TRANSFORMATION ===== -->
+    <div id="tab6" class="tab-content">
         <div class="kw-instruction">
             <strong>Complete the second sentence so that it has a similar meaning to the first sentence, using the word given.</strong><br>
             Do not change the word given. You must use between two and five words, including the word given.
@@ -719,10 +789,10 @@
         </div>
 
         <div>
-            <button class="check-btn" onclick="checkExercise5()">Check</button>
-            <button class="reset-btn" onclick="resetExercise5()">Try again</button>
+            <button class="check-btn" onclick="checkExercise6()">Check</button>
+            <button class="reset-btn" onclick="resetExercise6()">Try again</button>
         </div>
-        <div class="score-msg" id="msg5"></div>
+        <div class="score-msg" id="msg6"></div>
     </div>
 </div>
 
@@ -1163,7 +1233,96 @@
     }
 
     /* ============================================
-       ЗАВДАННЯ 5: KEY WORD TRANSFORMATION
+       ЗАВДАННЯ 5: MULTIPLE CHOICE TEXT
+       ============================================ */
+    const mcData = [
+        "I'm the middle child of the family. My older brother always used to ",
+        { num: 0, options: ["identify with", "pick on"], answer: "pick on" },
+        " me and accuse me of taking his things, so we often ",
+        { num: 1, options: ["fell out with", "took after"], answer: "fell out with" },
+        " each other. My younger sister and I get on well though. We both ",
+        { num: 2, options: ["take after", "depend on"], answer: "take after" },
+        " our dad who is quite easy-going. I feel I can ",
+        { num: 3, options: ["fall out with", "depend on"], answer: "depend on" },
+        " her one hundred percent. My mum is very patient. She tries to ",
+        { num: 4, options: ["pick on", "identify with"], answer: "identify with" },
+        " us all rather than taking sides. She's very persuasive too, and she usually ",
+        { num: 5, options: ["talks us into", "takes after"], answer: "talks us into" },
+        " us doing things whether we want to or not."
+    ];
+
+    function initExercise5() {
+        const container = document.getElementById('mc-text-container');
+        let html = '';
+
+        mcData.forEach(part => {
+            if (typeof part === 'string') {
+                html += part;
+            } else {
+                html += `<span style="white-space: nowrap;">`;
+                part.options.forEach((opt, idx) => {
+                    const isCorrect = opt === part.answer ? 'true' : 'false';
+                    html += `<span class="mc-option" data-num="${part.num}" data-value="${opt}" data-correct="${isCorrect}">${opt}</span>`;
+                    if (idx < part.options.length - 1) {
+                        html += ' / ';
+                    }
+                });
+                html += `</span>`;
+            }
+        });
+
+        container.innerHTML = html;
+
+        container.querySelectorAll('.mc-option').forEach(el => {
+            el.addEventListener('click', function() {
+                if (this.classList.contains('correct')) return;
+
+                const parent = this.parentElement;
+                parent.querySelectorAll('.mc-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    }
+
+    function checkExercise5() {
+        let correctCount = 0;
+        const questionNums = new Set();
+        
+        document.querySelectorAll('#mc-text-container .mc-option').forEach(el => {
+            if (el.dataset.num !== undefined) questionNums.add(el.dataset.num);
+        });
+        const totalQuestions = questionNums.size;
+
+        document.querySelectorAll('#mc-text-container .mc-option').forEach(el => {
+            if (el.dataset.num === undefined) return;
+            
+            if (el.classList.contains('selected')) {
+                if (el.dataset.correct === 'true') {
+                    el.classList.add('correct');
+                    el.classList.remove('selected', 'incorrect');
+                    correctCount++;
+                } else {
+                    el.classList.add('incorrect');
+                    el.classList.remove('selected');
+                }
+            }
+        });
+
+        const msg = document.getElementById('msg5');
+        msg.className = 'score-msg ' + (correctCount === totalQuestions ? 'ok' : 'fail');
+        msg.textContent = `Результат: ${correctCount} / ${totalQuestions}`;
+        if (correctCount === totalQuestions) msg.textContent += ' 🎉 Чудово!';
+    }
+
+    function resetExercise5() {
+        document.querySelectorAll('#mc-text-container .mc-option').forEach(el => {
+            el.classList.remove('selected', 'correct', 'incorrect');
+        });
+        document.getElementById('msg5').textContent = '';
+    }
+
+    /* ============================================
+       ЗАВДАННЯ 6: KEY WORD TRANSFORMATION
        ============================================ */
     const kwData = [
         {
@@ -1196,7 +1355,7 @@
             key: "TALK",
             start: "Did you ",
             end: " you stay over?",
-            answer: "talk your parents into letting" // Враховано структуру talk smb into doing smth
+            answer: "talk your parents into letting"
         },
         {
             num: 5,
@@ -1210,20 +1369,19 @@
             num: 6,
             original: "Michael can be trusted in a crisis.",
             key: "DEPEND",
-            start: "", // Тут пропуск на початку рядка
+            start: "", 
             end: " Michael in a crisis.",
             answer: "You can depend on"
         }
     ];
 
-    function initExercise5() {
+    function initExercise6() {
         const container = document.getElementById('kw-list');
         
         kwData.forEach((item) => {
             const div = document.createElement('div');
             div.className = 'kw-item';
             
-            // Формуємо HTML
             let html = `
                 <div class="kw-original">
                     <span class="kw-number">${item.num}</span>
@@ -1241,25 +1399,20 @@
             container.appendChild(div);
         });
 
-        // Дозволяємо перевірку по Enter
         container.querySelectorAll('.kw-input').forEach(input => {
             input.addEventListener('keydown', e => {
-                if (e.key === 'Enter') checkExercise5();
+                if (e.key === 'Enter') checkExercise6();
             });
         });
     }
 
-    function checkExercise5() {
-        const inputs = document.querySelectorAll('#tab5 .kw-input');
+    function checkExercise6() {
+        const inputs = document.querySelectorAll('#tab6 .kw-input');
         let correct = 0;
 
         inputs.forEach(input => {
-            // Очищуємо від зайвих пробілів, робимо нижній регістр, 
-            // а також замінюємо тире/апострофи на стандартні, якщо треба
             let userAnswer = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
             const correctAnswer = input.dataset.answer.toLowerCase();
-
-            // Перевіряємо чи співпадає
             const ok = userAnswer === correctAnswer;
 
             input.classList.toggle('correct', ok);
@@ -1267,18 +1420,18 @@
             if (ok) correct++;
         });
 
-        const msg = document.getElementById('msg5');
+        const msg = document.getElementById('msg6');
         msg.className = 'score-msg ' + (correct === inputs.length ? 'ok' : 'fail');
         msg.textContent = `Результат: ${correct} / ${inputs.length}`;
         if (correct === inputs.length) msg.textContent += ' 🎉 Чудово!';
     }
 
-    function resetExercise5() {
-        document.querySelectorAll('#tab5 .kw-input').forEach(input => {
+    function resetExercise6() {
+        document.querySelectorAll('#tab6 .kw-input').forEach(input => {
             input.value = '';
             input.classList.remove('correct', 'incorrect');
         });
-        document.getElementById('msg5').textContent = '';
+        document.getElementById('msg6').textContent = '';
     }
 
     /* ============================================
@@ -1288,6 +1441,7 @@
     initExercise3();
     initExercise4();
     initExercise5();
+    initExercise6();
 </script>
 
 </body>
